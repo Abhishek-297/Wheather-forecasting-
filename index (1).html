@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Weather Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="container">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h1 class="display-4 fw-bold mb-2 pulse">
+                    <i class="fas fa-cloud-sun me-2"></i>Weather Dashboard
+                </h1>
+                <p class="lead">Real-time weather information powered by WeatherAPI</p>
+            </div>
+
+            <!-- Search Section -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-6">
+                    <div class="search-container">
+                        <input type="text" id="cityInput" class="form-control search-input" 
+                               placeholder="Enter city name..." autocomplete="off">
+                        <button class="search-btn" onclick="searchWeather()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <div class="suggestions" id="suggestions"></div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-outline-light btn-sm me-2" onclick="getCurrentLocation()">
+                            <i class="fas fa-location-arrow me-1"></i>Use Current Location
+                        </button>
+                        <button class="btn btn-outline-light btn-sm" onclick="getPopularCities()">
+                            <i class="fas fa-globe me-1"></i>Popular Cities
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span id="errorText">Unable to fetch weather data. Please try again.</span>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="text-center mb-4">
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="mt-2">Fetching weather data...</div>
+                </div>
+            </div>
+
+            <!-- Main Weather Display -->
+            <div id="weatherDisplay" style="display: none;">
+                <div class="main-weather fade-in">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="location-info" id="locationName">
+                                <i class="fas fa-map-marker-alt me-2"></i>Loading...
+                            </div>
+                            <div class="current-time" id="currentTime">Loading...</div>
+                            <div class="d-flex align-items-center mt-2">
+                                <div class="temperature me-3" id="temperature">--°</div>
+                                <div>
+                                    <div class="h4 mb-1" id="description">Loading...</div>
+                                    <div class="text-light opacity-75" id="feelsLike">Feels like --°</div>
+                                    <div class="air-quality" id="airQuality" style="display: none;">
+                                        <i class="fas fa-leaf me-1"></i>Air Quality: <span id="aqiValue">Good</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="weather-icon" id="weatherIcon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weather Metrics -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="h5 mb-1" id="visibility">-- km</div>
+                            <div class="small opacity-75">Visibility</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="h5 mb-1" id="humidity">--%</div>
+                            <div class="small opacity-75">Humidity</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                            <div class="h5 mb-1" id="windSpeed">-- km/h</div>
+                            <div class="small opacity-75">Wind Speed</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-thermometer-half"></i>
+                            </div>
+                            <div class="h5 mb-1" id="pressure">-- mb</div>
+                            <div class="small opacity-75">Pressure</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Metrics -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-thermometer-three-quarters"></i>
+                            </div>
+                            <div class="h5 mb-1" id="heatIndex">--°</div>
+                            <div class="small opacity-75">Heat Index</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="h5 mb-1" id="uvIndex">--</div>
+                            <div class="small opacity-75">UV Index</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-compress-arrows-alt"></i>
+                            </div>
+                            <div class="h5 mb-1" id="windGust">-- km/h</div>
+                            <div class="small opacity-75">Wind Gust</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="weather-card metric-card fade-in">
+                            <div class="metric-icon">
+                                <i class="fas fa-cloud-rain"></i>
+                            </div>
+                            <div class="h5 mb-1" id="precipitation">-- mm</div>
+                            <div class="small opacity-75">Precipitation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3-Day Forecast -->
+                <div class="weather-card p-4 fade-in">
+                    <h4 class="mb-3">
+                        <i class="fas fa-calendar-alt me-2"></i>3-Day Forecast
+                    </h4>
+                    <div class="row g-2" id="forecast">
+                        <!-- Forecast cards will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
