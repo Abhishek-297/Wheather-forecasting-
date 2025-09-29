@@ -1,9 +1,9 @@
 const API_KEY = '3e57efcb6f59407da39101756252809';
 const BASE_URL = 'https://api.weatherapi.com/v1';
 
-// Initialize with user's location or Delhi
+// Initialize with user's location or Delhi, India
 window.addEventListener('DOMContentLoaded', function() {
-    getCurrentLocation() || searchWeather('Delhi');
+    getCurrentLocation() || searchWeather('Delhi, India');
     initializeTheme();
 });
 
@@ -58,6 +58,7 @@ function toggleTheme() {
 function showLoading() {
     document.getElementById('loadingSpinner').classList.add('active');
     document.getElementById('weatherDisplay').style.display = 'none';
+    document.getElementById('todaySummary').style.display = 'none';
     hideError();
 }
 
@@ -162,13 +163,13 @@ function getCurrentLocation() {
             },
             function(error) {
                 console.error('Geolocation error:', error);
-                // Fallback to Delhi
-                searchWeather('Delhi');
+                // Fallback to Delhi, India
+                searchWeather('Delhi, India');
             }
         );
     } else {
-        // Fallback to Delhi
-        searchWeather('Delhi');
+        // Fallback to Delhi, India
+        searchWeather('Delhi, India');
     }
 }
 
@@ -188,6 +189,16 @@ function displayWeather(data) {
     const current = data.current;
     const location = data.location;
     const forecast = data.forecast.forecastday;
+
+    // Update today's summary
+    document.getElementById('todaySummary').style.display = 'block';
+    document.getElementById('summaryTemperature').textContent = `${Math.round(current.temp_c)}°`;
+    document.getElementById('summaryDescription').textContent = current.condition.text;
+    document.getElementById('summaryLocation').innerHTML = 
+        `<i class="fas fa-map-marker-alt me-2"></i>${location.name}, ${location.country}`;
+    document.getElementById('summaryHumidity').textContent = `${current.humidity}%`;
+    document.getElementById('summaryWind').textContent = `${current.wind_kph} km/h`;
+    document.getElementById('summaryFeelsLike').textContent = `${Math.round(current.feelslike_c)}°`;
 
     // Update main weather display
     document.getElementById('locationName').innerHTML = 
@@ -220,6 +231,9 @@ function displayWeather(data) {
         const aqiLabels = ['Good', 'Moderate', 'Unhealthy for Sensitive', 'Unhealthy', 'Very Unhealthy', 'Hazardous'];
         document.getElementById('aqiValue').textContent = aqiLabels[aqi - 1] || 'Unknown';
         document.getElementById('airQuality').style.display = 'inline-block';
+        
+        document.getElementById('summaryAqiValue').textContent = aqiLabels[aqi - 1] || 'Unknown';
+        document.getElementById('summaryAirQuality').style.display = 'inline-block';
     }
 
     // Update forecast
@@ -269,9 +283,9 @@ function updateBackground(condition, isDay) {
     const body = document.body;
     
     if (!isDay) {
-        body.style.background = 'var(--night-gradient)';
+        body.style.background = 'var(--night-navy-gradient)';
     } else if (condition.includes('sun') || condition.includes('clear')) {
-        body.style.background = 'var(--sunny-gradient)';
+        body.style.background = 'var(--sunny-navy-gradient)';
     } else if (condition.includes('rain') || condition.includes('storm') || condition.includes('drizzle')) {
         body.style.background = 'var(--rainy-gradient)';
     } else if (condition.includes('snow') || condition.includes('blizzard')) {
@@ -280,7 +294,7 @@ function updateBackground(condition, isDay) {
     } else if (condition.includes('cloud') || condition.includes('overcast')) {
         body.style.background = 'var(--cloudy-gradient)';
     } else {
-        body.style.background = 'var(--primary-gradient)';
+        body.style.background = 'var(--primary-navy-gradient)';
     }
 }
 
