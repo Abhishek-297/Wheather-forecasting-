@@ -48,7 +48,7 @@
                     <div class="indian-cities mt-3">
                         <span class="me-2">Indian Cities:</span>
                         <button class="city-btn" onclick="searchIndianCity('Bangalore')">Bangalore</button>
-                        <button class="city-btn" onclick="searchIndianCity('Delhi')">Delhi</button>
+                        <button class="city-btn" onclick="searchIndianCity('Delhi, India')">Delhi</button>
                         <button class="city-btn" onclick="searchIndianCity('Mumbai')">Mumbai</button>
                         <button class="city-btn" onclick="searchIndianCity('Chennai')">Chennai</button>
                         <button class="city-btn" onclick="searchIndianCity('Kolkata')">Kolkata</button>
@@ -69,6 +69,52 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                     <div class="mt-2">Fetching weather data...</div>
+                </div>
+            </div>
+
+            <!-- Today's Weather Summary -->
+            <div id="todaySummary" class="weather-card p-4 mb-4 fade-in" style="display: none;">
+                <h3 class="text-center mb-3">
+                    <i class="fas fa-calendar-day me-2"></i>Today's Weather Summary
+                </h3>
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center">
+                        <div class="temperature-large" id="summaryTemperature">--°</div>
+                        <div class="h4 mb-2" id="summaryDescription">Loading...</div>
+                        <div class="location-info" id="summaryLocation">
+                            <i class="fas fa-map-marker-alt me-2"></i>Loading...
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="metric-icon-small">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="h6 mb-1" id="summaryHumidity">--%</div>
+                                <div class="small opacity-75">Humidity</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="metric-icon-small">
+                                    <i class="fas fa-wind"></i>
+                                </div>
+                                <div class="h6 mb-1" id="summaryWind">-- km/h</div>
+                                <div class="small opacity-75">Wind</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="metric-icon-small">
+                                    <i class="fas fa-thermometer-half"></i>
+                                </div>
+                                <div class="h6 mb-1" id="summaryFeelsLike">--°</div>
+                                <div class="small opacity-75">Feels Like</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <div class="air-quality-summary" id="summaryAirQuality" style="display: none;">
+                                <i class="fas fa-leaf me-1"></i>Air Quality: <span id="summaryAqiValue">Good</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
